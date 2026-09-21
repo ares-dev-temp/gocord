@@ -28,12 +28,14 @@ func main() {
 
 	port := os.Getenv("PORT")
 
+	mux.HandleFunc("POST /api/message", handleMessage)
+
 	server := http.Server{
 		Addr:    ":8080",
 		Handler: mux,
 	}
 
-	fmt.Printf("Running Server on port %s...", port)
+	fmt.Printf("Running Server on port %s...\n", port)
 
 	err := server.ListenAndServe()
 	log.Fatal(err)
