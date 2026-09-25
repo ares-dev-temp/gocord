@@ -10,7 +10,7 @@ type Message struct {
 	Body string `json:"body"`
 }
 
-func handleMessage(write http.ResponseWriter, request *http.Request) {
+func (cfg *Config) handleMessage(write http.ResponseWriter, request *http.Request) {
 	decoder := json.NewDecoder(request.Body)
 	msg := Message{}
 	err := decoder.Decode(&msg)
@@ -20,5 +20,10 @@ func handleMessage(write http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	fmt.Printf("Received msg: %s\n", msg.Body)
+	//save chats
+	_, err = cfg.database.CreateChatlog( request.Context(), msg.Body )
+
+	if err != nil{
+		fmt.Printf( "issue saving chat: ", err, "\n" )
+	}
 }

@@ -401,3 +401,8 @@ FodyWeavers.xsd
 *.sln.iml
 
 GoCord
+.env
+internal/
+go.mod
+go.sum
+
