@@ -9,12 +9,16 @@ import (
 	"os"
 )
 
+type User struct {
+	Username string `json:"username"`
+}
+
 type Message struct {
 	Body string `json:"body"`
 }
 
-func sendMessage(url string, data Message) {
-	jsonData, _ := json.Marshal(data)
+func request( url string, T any ){
+	jsonData, _ := json.Marshal(T)
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
 
@@ -36,29 +40,35 @@ func sendMessage(url string, data Message) {
 
 	defer res.Body.Close()
 
-	var createdMsg Message
+	//var createdMsg Message
+	var createdData any
 	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&createdMsg)
+	err = decoder.Decode(&createdData)
 	if err != nil {
 		return
 	}
 }
 
 func main() {
-	url := "http://localhost:8080/api/message"
+	url_dir := "http://localhost:8080/api"
 	scanner := bufio.NewScanner(os.Stdin)
 
+	//prompts user to login a username
+	fmt.Print("Enter username: ")
+
+	scanner.Scan()
+	text_out := scanner.Text()
+	username := User{Username: text_out}
+	request( url_dir + "/login", username )
+
+	//prompts user to send messages
 	for {
 		fmt.Print("GoCord > ")
 
 		scanner.Scan()
 		text_out := scanner.Text()
-
 		msg := Message{Body: text_out}
-
-		sendMessage(url, msg)
-
-		//fmt.Printf("output >> %s\n", text_out)
+		request(url_dir + "/message", msg)
 	}
 
 }

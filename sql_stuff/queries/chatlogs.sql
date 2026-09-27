@@ -1,9 +1,10 @@
 -- name: CreateChatlog :one
-INSERT INTO chatlogs ( id, sent_at, message ) 
+INSERT INTO chatlogs ( id, sent_at, message, user_id ) 
 VALUES(
     gen_random_uuid(),
     NOW(),
-    $1
+    $1,
+    $2
 )
 RETURNING *;
 

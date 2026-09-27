@@ -55,6 +55,8 @@ func main() {
 	//mux.HandleFunc("POST /api/message", handleMessage)
 	mux.HandleFunc("POST /api/message", cfg.handleMessage)
 
+	mux.HandleFunc("POST /api/login", cfg.handleCreateLogin)
+
 	server := http.Server{
 		Addr:    ":8080",
 		Handler: mux,
