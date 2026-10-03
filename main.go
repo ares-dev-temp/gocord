@@ -1,9 +1,9 @@
 package main
 
 import (
-	"gocord/internal/database"
 	"database/sql"
 	"fmt"
+	"gocord/internal/database"
 	"log"
 	"net/http"
 	"os"
@@ -12,7 +12,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-type Config struct{
+type Config struct {
 	database *database.Queries
 }
 
@@ -35,13 +35,13 @@ func main() {
 
 	dbURL := os.Getenv("DB_URL")
 
-	fmt.Printf( "url %s: \n", dbURL )
+	fmt.Printf("url %s: \n", dbURL)
 
 	db, err := sql.Open("postgres", dbURL)
 	dbQueries := database.New(db)
 
 	cfg := Config{
-		database : dbQueries,
+		database: dbQueries,
 	}
 
 	//dbQueries.CreateChatlog( context.Background(), "Hello World!" )
@@ -56,6 +56,8 @@ func main() {
 	mux.HandleFunc("POST /api/message", cfg.handleMessage)
 
 	mux.HandleFunc("POST /api/login", cfg.handleCreateLogin)
+
+	mux.HandleFunc("POST /api/reset", cfg.handleReset)
 
 	server := http.Server{
 		Addr:    ":8080",
